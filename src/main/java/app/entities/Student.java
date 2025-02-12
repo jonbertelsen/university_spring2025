@@ -8,8 +8,9 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Builder(toBuilder = true)
 @ToString
+@EqualsAndHashCode
 @Entity
 public class Student {
     @Id

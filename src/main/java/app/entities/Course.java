@@ -14,6 +14,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 @ToString
+@EqualsAndHashCode
 @Entity
 public class Course {
     @Id
@@ -27,6 +28,7 @@ public class Course {
 
     // Relations
     @Builder.Default
+    @EqualsAndHashCode.Exclude
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "course", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Student> students = new HashSet<>();
 
