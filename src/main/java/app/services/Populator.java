@@ -13,22 +13,22 @@ import java.util.List;
 
 public class Populator {
     private final static EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
-    public static void populate() {
+    public static Student[] populate() {
         populateTeachers();
         populateStudents();
         populateCourses();
         setupCourseTeachers();
-        setupCourseStudents();
+        return setupCourseStudents();
     }
 
-   private static void populateTeachers() {
+    private static void populateTeachers() {
         try (EntityManager em = emf.createEntityManager()){
             List<Teacher> teachers = List.of(
-                    Teacher.builder().email("teacher1@example.com").name("Alice").zoom("zoom1").build(),
-                    Teacher.builder().email("teacher2@example.com").name("Bob").zoom("zoom2").build(),
-                    Teacher.builder().email("teacher3@example.com").name("Charlie").zoom("zoom3").build(),
-                    Teacher.builder().email("teacher4@example.com").name("David").zoom("zoom4").build(),
-                    Teacher.builder().email("teacher5@example.com").name("Emma").zoom("zoom5").build()
+                    Teacher.builder().email("teacher1@example.com").name("Anna").zoom("zoom1").build(),
+                    Teacher.builder().email("teacher2@example.com").name("Benny").zoom("zoom2").build(),
+                    Teacher.builder().email("teacher3@example.com").name("Carl").zoom("zoom3").build(),
+                    Teacher.builder().email("teacher4@example.com").name("Dennis").zoom("zoom4").build(),
+                    Teacher.builder().email("teacher5@example.com").name("Erna").zoom("zoom5").build()
             );
             em.getTransaction().begin();
             teachers.forEach(em::persist);
@@ -47,7 +47,7 @@ public class Populator {
             );
 
             em.getTransaction().begin();
-                students.forEach(em::persist);
+            students.forEach(em::persist);
             em.getTransaction().commit();
         }
     }
@@ -67,7 +67,7 @@ public class Populator {
                           .startDate(LocalDate.of(2025, 7, 1)).endDate(LocalDate.of(2025, 10, 1)).build()
             );
             em.getTransaction().begin();
-               courses.forEach(em::persist);
+            courses.forEach(em::persist);
             em.getTransaction().commit();
 
         }
@@ -103,7 +103,7 @@ public class Populator {
         }
     }
 
-    private static void setupCourseStudents(){
+    private static Student[] setupCourseStudents(){
         try (EntityManager em = emf.createEntityManager()) {
             Course course1 = em.find(Course.class, 1);
             Course course2 = em.find(Course.class, 2);
@@ -119,13 +119,14 @@ public class Populator {
             course1.addStudent(student1);
             course1.addStudent(student2);
             course1.addStudent(student3);
-            course1.addStudent(student4);
-            course2.addStudent(student5);
+            course2.addStudent(student4);
+            course3.addStudent(student5);
 
             em.getTransaction().begin();
-                em.merge(course1);
-                em.merge(course2);
+            em.merge(course1);
+            em.merge(course2);
             em.getTransaction().commit();
+            return new Student[]{student1, student2, student3, student4, student5};
         }
     }
 
