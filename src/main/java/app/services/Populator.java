@@ -9,16 +9,17 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 
 public class Populator {
     private final static EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
-    public static void populate() {
+    public static List<Course> populate() {
         populateTeachers();
         populateStudents();
         populateCourses();
         setupCourseTeachers();
-        setupCourseStudents();
+        return setupCourseStudents();
     }
 
    private static void populateTeachers() {
@@ -31,7 +32,7 @@ public class Populator {
                     Teacher.builder().email("teacher5@example.com").name("Emma").zoom("zoom5").build()
             );
             em.getTransaction().begin();
-            teachers.forEach(em::persist);
+                teachers.forEach(em::persist);
             em.getTransaction().commit();
         }
     }
@@ -103,7 +104,7 @@ public class Populator {
         }
     }
 
-    private static void setupCourseStudents(){
+    private static List<Course> setupCourseStudents(){
         try (EntityManager em = emf.createEntityManager()) {
             Course course1 = em.find(Course.class, 1);
             Course course2 = em.find(Course.class, 2);
@@ -123,10 +124,12 @@ public class Populator {
             course2.addStudent(student5);
 
             em.getTransaction().begin();
-                em.merge(course1);
-                em.merge(course2);
+                course1 = em.merge(course1);
+                course2= em.merge(course2);
             em.getTransaction().commit();
+            return List.of(course1, course2);
         }
+
     }
 
 }

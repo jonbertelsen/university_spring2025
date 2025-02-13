@@ -1,7 +1,10 @@
 package app;
 
 import app.daos.impl.CourseDAO;
+import app.entities.Course;
 import app.services.Populator;
+
+import java.util.List;
 
 public class Main {
 
@@ -11,7 +14,13 @@ public class Main {
 
         System.out.println("Hello, World!");
 
-        Populator.populate();
+        List<Course> courseList= Populator.populate();
+        courseList.forEach(System.out::println);
+
+        Course c1 = courseList.get(0);
+        Course c2 = courseList.get(1);
+        System.out.println("Underviser på c1: " + c1.getTeacher().getName());
+
 
     }
 }
